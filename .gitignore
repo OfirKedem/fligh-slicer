@@ -1,0 +1,6 @@
+.*
+*.gitignore
+
+*.ipynb
+
+/flight-slicer/
