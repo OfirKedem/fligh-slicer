@@ -52,7 +52,7 @@ def generate_data(reps: int = 100,
         x, y, spiral_start_idx, spiral_end_idx = create_spiral(spiral_freq=spiral_freq,
                                                                spiral_size=spiral_size,
                                                                start_point_range=30,
-                                                               noise_level=0.1,
+                                                               noise_level=0.0,
                                                                n_spiral=n_spiral,
                                                                n_routs=n_routs
                                                                )

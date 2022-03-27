@@ -54,5 +54,5 @@ class VGG11(nn.Module):
 
 if __name__ == "__main__":
     cnn = VGG11()
-    x = torch.zeros([128, 2, 600])
+    x = torch.zeros([2, 2, 600])
     cnn(x)
