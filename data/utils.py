@@ -100,7 +100,7 @@ def remove_samples(x, y, start, end, target_len):
 
 
 def resize(x, y, start, end, target_len: int):
-    """pad or cat to target len"""
+    """pad or cut to target len"""
 
     if len(x) < target_len:
         x, y, start, end = pad(x, y, start, end, target_len)

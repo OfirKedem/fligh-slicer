@@ -41,14 +41,14 @@ def train():
     pl.seed_everything(42)
 
     signal_length = 600
-    train_loader, val_loader = setup_loader(train_size=50000,
-                                            val_size=5000,
+    train_loader, val_loader = setup_loader(train_size=5000,
+                                            val_size=500,
                                             sample_len=signal_length,
-                                            batch_size=512,
-                                            flatten_channels=False)
+                                            batch_size=32,
+                                            flatten_channels=True)
 
-    # model = MLP(in_size=signal_length * 2)
-    model = VGG11()
+    model = MLP(in_size=signal_length * 2)
+    # model = VGG11()
 
     lr = 1e-2
     regr = Regressor(model, torch.nn.L1Loss(),
@@ -63,7 +63,7 @@ def train():
 
     callbacks = [ModelCheckpoint(monitor='val/loss')]
 
-    trainer = pl.Trainer(max_epochs=10,
+    trainer = pl.Trainer(max_epochs=2,
                          logger=comet_logger,
                          log_every_n_steps=20,
                          gpus=1 if torch.cuda.is_available() else 0,
