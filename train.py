@@ -3,6 +3,7 @@ import comet_ml
 import os
 
 import torch.nn
+import yaml
 from torch.utils.data import DataLoader
 import pytorch_lightning as pl
 from pytorch_lightning.loggers import CometLogger
@@ -20,7 +21,7 @@ def setup_loader(train_size,
                  batch_size,
                  flatten_channels: bool,
                  num_workers: int = 2,
-                 ):
+                 **kwargs):
     train_set = RoutesDataset(train_size, sample_len, flatten_channels)
     val_set = RoutesDataset(val_size, sample_len, flatten_channels)
 
@@ -37,28 +38,27 @@ def setup_loader(train_size,
     return train_loader, val_loader
 
 
-def train():
-    pl.seed_everything(42)
+def train(cfg: dict):
+    pl.seed_everything(cfg['seed'])
 
-    signal_length = 600
-    train_loader, val_loader = setup_loader(train_size=5000,
-                                            val_size=500,
-                                            sample_len=signal_length,
-                                            batch_size=32,
+    sample_len = cfg['data']['sample_len']
+    train_loader, val_loader = setup_loader(**cfg['data'],
                                             flatten_channels=True)
 
-    model = MLP(in_size=signal_length * 2)
+    model = MLP(in_size=sample_len * 2)
     # model = VGG11()
 
     lr = 1e-2
-    regr = Regressor(model, torch.nn.L1Loss(),
+    regr = Regressor(model,
+                     torch.nn.L1Loss(),
                      lr=lr,
                      optim_type='Adam')
 
     comet_logger = CometLogger(
         api_key=os.environ.get("COMET_API_KEY"),
-        save_dir=".",  # Optional
-        project_name="flight-slicer",  # Optional
+        save_dir=".",
+        project_name="flight-slicer",
+        experiment_name=cfg['experiment_name']
     )
 
     callbacks = [ModelCheckpoint(monitor='val/loss')]
@@ -75,4 +75,6 @@ def train():
 
 
 if __name__ == "__main__":
-    train()
+    cfg_path = 'train_config.yaml'
+    config = yaml.safe_load(open(cfg_path, 'r'))
+    train(config)

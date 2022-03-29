@@ -7,8 +7,23 @@ from data.utils import generate_data, resize_data_list
 class RoutesDataset(Dataset):
     def __init__(self, size: int,
                  sample_len: int,
-                 flatten_channels: bool = False):
-        data = generate_data(reps=size)
+                 flatten_channels: bool = False,
+                 spiral_freq_range=(1, 2.5),
+                 spiral_size_range=(5, 10),
+                 n_spiral_range=(200, 500),
+                 n_routs_range=(50, 200),
+                 start_point_range=30,
+                 noise_level=0
+
+                 ):
+        data = generate_data(reps=size,
+                             spiral_freq_range=spiral_freq_range,
+                             spiral_size_range=spiral_size_range,
+                             n_spiral_range=n_spiral_range,
+                             n_routs_range=n_routs_range,
+                             start_point_range=start_point_range,
+                             noise_level=noise_level
+                             )
         self.data = resize_data_list(data, sample_len)
         self.flatten_channels = flatten_channels
 

@@ -12,7 +12,10 @@ def create_spiral(spiral_freq: float = 1,
     x = t * np.sin(spiral_freq * t)
     y = t * np.cos(spiral_freq * t)
 
-    start_point = np.random.uniform(-start_point_range, start_point_range, 2)
+    start_point = np.random.uniform(spiral_size, start_point_range, 2)
+    sign = np.random.choice([-1, 1], 2)
+    start_point *= sign
+
     spiral_start = np.array([x[0], y[0]])
     spiral_end = np.array([x[-1], y[-1]])
 
@@ -40,7 +43,9 @@ def generate_data(reps: int = 100,
                   spiral_freq_range=(1, 2.5),
                   spiral_size_range=(5, 10),
                   n_spiral_range=(200, 500),
-                  n_routs_range=(50, 200)):
+                  n_routs_range=(50, 200),
+                  start_point_range=30,
+                  noise_level=0):
     data = []
 
     for i in range(reps):
@@ -51,8 +56,8 @@ def generate_data(reps: int = 100,
 
         x, y, spiral_start_idx, spiral_end_idx = create_spiral(spiral_freq=spiral_freq,
                                                                spiral_size=spiral_size,
-                                                               start_point_range=30,
-                                                               noise_level=0.0,
+                                                               start_point_range=start_point_range,
+                                                               noise_level=noise_level,
                                                                n_spiral=n_spiral,
                                                                n_routs=n_routs
                                                                )

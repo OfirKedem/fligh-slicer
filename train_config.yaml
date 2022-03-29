@@ -1,0 +1,23 @@
+seed: 42
+
+data:
+  train_size: 5000
+  val_size: 500
+  sample_len: 600
+  spiral_freq_range: (1, 2.5)
+  spiral_size_range: (5, 10)
+  n_spiral_range: (200, 500)
+  n_routs_range: (50, 200)
+  start_point_range: 30
+  noise_level: 0
+  batch_size: 32
+
+arch:
+  type: "MLP"
+
+
+train:
+  lr: 1e-2
+
+
+experiment_name: "debug"
