@@ -2,5 +2,7 @@
 *.gitignore
 
 *.ipynb
+!train.ipynb
+!viz_predications.ipynb
 
 /flight-slicer/
