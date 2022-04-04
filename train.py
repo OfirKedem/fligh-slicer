@@ -10,8 +10,7 @@ from pytorch_lightning.loggers import CometLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
 
 from lightning_regressor import Regressor
-from models.mlp import MLP
-from models.cnn import VGG11
+from models.model_registry import models
 from data.dataset import RoutesDataset
 
 
@@ -21,7 +20,7 @@ def setup_loader(train_size,
                  batch_size,
                  flatten_channels: bool,
                  num_workers: int = 2,
-                 **kwargs):
+                 **_kwargs):
     train_set = RoutesDataset(train_size, sample_len, flatten_channels)
     val_set = RoutesDataset(val_size, sample_len, flatten_channels)
 
@@ -41,18 +40,15 @@ def setup_loader(train_size,
 def train(cfg: dict):
     pl.seed_everything(cfg['seed'])
 
-    sample_len = cfg['data']['sample_len']
     train_loader, val_loader = setup_loader(**cfg['data'],
                                             flatten_channels=True)
 
-    model = MLP(in_size=sample_len * 2)
-    # model = VGG11()
+    arch = cfg['arch']
+    model = models[arch['type']](**arch['kwargs'])
 
-    lr = 1e-2
     regr = Regressor(model,
                      torch.nn.L1Loss(),
-                     lr=lr,
-                     optim_type='Adam')
+                     **cfg['train'])
 
     comet_logger = CometLogger(
         api_key=os.environ.get("COMET_API_KEY"),
