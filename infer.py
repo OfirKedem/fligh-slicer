@@ -40,7 +40,7 @@ class DeepSlicer:
         sample[0, 1] = torch.as_tensor(y)
 
         if self.flatten_data:
-            sample = sample.flatten()
+            sample = sample.reshape([1, -1])
 
         with torch.no_grad():
             pred = self.regr(sample)[0]
@@ -66,7 +66,7 @@ def infer(ckp_path):
 
 
 if __name__ == "__main__":
-    net = DeepSlicer("flight-slicer/f849c8ca56674ea99af2715f8d08ed47/checkpoints/epoch=2-step=587.ckpt")
+    net = DeepSlicer("flight-slicer/5ce2c740d2254ceb8639230a2039566f/checkpoints/epoch=298-step=1494.ckpt")
     length = 600
     x = torch.zeros(length)
     y = torch.zeros(length)

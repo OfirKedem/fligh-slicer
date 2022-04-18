@@ -44,6 +44,6 @@ class Regressor(pl.LightningModule):
         elif optim_type == 'SGD':
             optimizer = SGD(self.parameters(), lr=lr)
         else:
-            raise ValueError('Unknown optimizer typr')
+            raise ValueError('Unknown optimizer type')
 
         return optimizer
